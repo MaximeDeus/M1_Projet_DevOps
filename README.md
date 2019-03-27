@@ -1,2 +1,26 @@
 # M1_Projet_DevOps
-Se trouve dans ce dépôt le projet réalisé dans le cadre de l'UE DevOps en M1 Informatique à l'UGA
+
+//TODO Mise en page markdown
+
+//Titre
+Documentation du projet
+
+//Cf sect 3.3 
+1- Présentation de l'ensemble des fonctionnalités 
+
+//TODO sect 4.3 description des fonctionnalités fournies par notre service
+
+//Cf sect 4.3
+2- Présentation des outils utilisés
+
+//TODO sect 4.3 listing des outils utilisés, justifier les choix effectués
+//Si partie Docker réalisée, lister les différentes images chacune accompagnée d'une courte description
+
+//Cf 3.3 
+3- Mode d'emploi
+
+//TODO Manuel d'utilisation des services
+
+4- FeedBack
+
+//TODO Retours sur les différents outils utilisés durant ce Projet
