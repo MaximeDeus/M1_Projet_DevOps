@@ -90,11 +90,44 @@ public class Dataframe {
         }
     }
 
-    public void displayFirstLinesDataframe() {
-
+    public void displayFirstLinesDataframe(int nb_lines) {
+        //TODO Ajouter try/catch pour gérer OOB
+        int index;
+        String space = new String(new char[10]).replace("\0", " ");
+        for (String nomColonne : datas.get(0).keySet()) {
+            System.out.print(nomColonne + space); //Affichage des noms des colonnes
+        }
+        System.out.println();
+        for (index = 0; index < nb_lines; index++) { //Parcourt de chaque ligne
+            HashMap<String, Object> ligne = datas.get(index);
+            for (String nomColonne : ligne.keySet()) {
+                Object valeur = ligne.get(nomColonne);
+                //Calcul affichage nb d'espace : (valeurParDefaut + taille nomColonne - taille valeur)
+                space = new String(new char[10 + (nomColonne.length() - valeur.toString().length())]).replace("\0", " ");
+                System.out.print(valeur + space); //Affichage des valeurs de cette ligne
+            }
+            System.out.println();
+        }
     }
 
-    public void displayLastLinesDataframe() {
+    public void displayLastLinesDataframe(int nb_lines) {
+        //TODO Ajouter try/catch pour gérer OOB
+        int index;
+        String space = new String(new char[10]).replace("\0", " ");
+        for (String nomColonne : datas.get(0).keySet()) {
+            System.out.print(nomColonne + space); //Affichage des noms des colonnes
+        }
+        System.out.println();
+        for (index = datas.size() - nb_lines; index < datas.size(); index++) { //Parcourt de chaque ligne
+            HashMap<String, Object> ligne = datas.get(index);
+            for (String nomColonne : ligne.keySet()) {
+                Object valeur = ligne.get(nomColonne);
+                //Calcul affichage nb d'espace : (valeurParDefaut + taille nomColonne - taille valeur)
+                space = new String(new char[10 + (nomColonne.length() - valeur.toString().length())]).replace("\0", " ");
+                System.out.print(valeur + space); //Affichage des valeurs de cette ligne
+            }
+            System.out.println();
+        }
 
     }
 
@@ -125,8 +158,12 @@ public class Dataframe {
 
         System.out.println("creation dataframe");
         Dataframe dataframe = new Dataframe(colonnes);
-        System.out.println("affichage dataframe");
+        System.out.println("affichage dataframe complet");
         dataframe.displayAllDataframe();
+        System.out.println("affichage dataframe 2 premières lignes");
+        dataframe.displayFirstLinesDataframe(2);
+        System.out.println("affichage dataframe 2 dernières lignes");
+        dataframe.displayLastLinesDataframe(2);
     }
 
 }
