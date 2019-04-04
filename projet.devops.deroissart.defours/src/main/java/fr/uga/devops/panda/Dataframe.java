@@ -19,6 +19,10 @@ public class Dataframe {
      * Un dataframe est ici représenté par une liste de dictionnaires (ligne)
      * Chaque dictionnaire possède toutes les colonnes (clés)
      * Chacune est associée à la valeur de sa ligne
+     * <p>
+     * Cette implémentation est calquée sur le modèle Pandas.
+     * Voir méthode 4 sur
+     * https://www.geeksforgeeks.org/different-ways-to-create-pandas-dataframe/
      */
     List<HashMap<String, Object>> datas;
 
@@ -131,6 +135,54 @@ public class Dataframe {
 
     }
 
+    /**
+     * Cette méthode permet de créer un Dataframe à partir d'un sous-ensemble
+     * d'un Dataframe existant
+     * <p>
+     * La sélection est faite par ligne
+     * <p>
+     * Plus d'infos sur
+     * <p>
+     * http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.iloc.html#pandas.DataFrame.iloc
+     */
+    public Dataframe iloc(int begin, int end) {
+        //TODO Try/Catch OOB
+        int index;
+        HashMap<String, List<Object>> colonnes = new HashMap<>(); //Paramètre qui est destiné au constructeur
+        for (String nomColonne : this.datas.get(0).keySet()) { //Pour chaque colonne (label)
+            List<Object> values = new ArrayList<>(); //On stocke les valeurs du sous ens. dans une liste
+            for (index = begin; index <= end; index++) {
+                values.add(this.datas.get(index).get(nomColonne));
+            }
+            colonnes.put(nomColonne, values);
+        }
+        return new Dataframe(colonnes);
+    }
+
+    /**
+     * Cette méthode permet de créer un Dataframe à partir d'un sous-ensemble
+     * d'un Dataframe existant
+     * <p>
+     * La sélection est faite par colonne
+     * <p>
+     * Plus d'infos sur
+     * <p>
+     * http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.iloc.html#pandas.DataFrame.iloc
+     */
+    public Dataframe loc(List<String> labels) {
+        //TODO Vérifier que les clés existent
+        int index;
+        HashMap<String, List<Object>> colonnes = new HashMap<>(); //Paramètre qui est destiné au constructeur
+        for (String nomColonne : labels) { //Pour chaque colonne (label)
+            List<Object> values = new ArrayList<>(); //On stocke les valeurs du sous ens. dans une liste
+            for (index = 0; index < this.datas.size(); index++) {
+                values.add(this.datas.get(index).get(nomColonne));
+            }
+            colonnes.put(nomColonne, values);
+        }
+        return new Dataframe(colonnes);
+    }
+
     public static void main(String args[]) {
         HashMap<String, List<Object>> colonnes = new HashMap<>();
 
@@ -164,6 +216,24 @@ public class Dataframe {
         dataframe.displayFirstLinesDataframe(2);
         System.out.println("affichage dataframe 2 dernières lignes");
         dataframe.displayLastLinesDataframe(2);
+
+        System.out.println("création de sous ensembles");
+
+        System.out.println("iloc");
+
+        Dataframe dataframe1a2 = dataframe.iloc(0, 1);
+        dataframe1a2.displayAllDataframe();
+
+        Dataframe dataframe3a4 = dataframe.iloc(2, 3);
+        dataframe3a4.displayAllDataframe();
+
+        System.out.println("loc");
+        List<String> positionEtNom = new ArrayList<>();
+        positionEtNom.add("position");
+        positionEtNom.add("nom");
+        Dataframe dataframePositionEtNom = dataframe.loc(positionEtNom);
+        dataframePositionEtNom.displayAllDataframe();
     }
+
 
 }
