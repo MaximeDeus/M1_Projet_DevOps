@@ -48,4 +48,12 @@ public class DataframeTest {
     public void testConstructorOneWithOneColumn() {
         dataframe = new Dataframe(colonnes);
     }
+
+
+    /**
+     * This class is used to easily test if an Exception is raised
+     * For more informations, see :
+     *
+     * http://www.arolla.fr/blog/2014/03/catch-exception-pour-tester-vos-exceptions-sur-junit/
+     */
 }
