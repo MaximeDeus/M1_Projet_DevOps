@@ -11,9 +11,12 @@ import fr.uga.devops.panda.strategy.operation.Min;
 import fr.uga.devops.panda.strategy.operation.Operation;
 import fr.uga.devops.panda.strategy.operation.Sum;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * Main class of the project
@@ -68,9 +71,9 @@ public class Dataframe {
             //Fill column
             for (Object columnValue : columns.get(columnName)) {
                 if (first_column) { //if first column
-                    HashMap<String, Object> cell = new HashMap<>();
-                    cell.put(columnName, columnValue);
-                    datas.add(cell);
+                    HashMap<String, Object> line = new HashMap<>();
+                    line.put(columnName, columnValue);
+                    datas.add(line);
                 } else { //other columns
                     datas.get(index).put(columnName, columnValue);
                     index++;
@@ -100,8 +103,44 @@ public class Dataframe {
      */
 
 
-    public void Dataframe(HashMap<String, List<Object>> columns) {
-        //TODO
+    public Dataframe(String pathName) throws FileNotFoundException {
+        datas = new ArrayList<>();
+        Scanner scanner = new Scanner(new File(pathName));
+        String value = "";
+        int index = 0;
+        int nbOfColumn = 0;
+        int cpt = 0;
+        List<String> labels = new ArrayList<>(); //labels
+        boolean first_line = true; //first line = labels
+        scanner.useDelimiter(",|\\r"); //Each value must be separated by a comma
+        while (scanner.hasNext()) {
+            value = scanner.next();
+            if (value.contains("\n")) { //end of line
+                first_line = false; //Fill columns
+            }
+            if (first_line) { //Fill labels
+                nbOfColumn++;
+                labels.add(value);
+                HashMap<String, Object> line = new HashMap<>();
+                datas.add(line); //Initialize lines
+            } else { //Fill columns
+                for (String label : labels) { // Fill line by line
+                    //Remove \n (contains 1st value of the next column or EOF)
+                    if (value.contains("\n")) {
+                        value = value.substring(1);
+                    }
+                    datas.get(index).put(label, value);
+                    if (cpt == nbOfColumn - 1) {
+                        cpt = 0;
+                    } else {
+                        cpt++;
+                        value = scanner.next();
+                    }
+                }
+                index++;
+            }
+        }
+        scanner.close();
     }
 
     //DISPLAY Dataframe
@@ -256,7 +295,7 @@ public class Dataframe {
     }
 
 
-    public static void main(String args[]) throws NotALabelException, NotAnIntegeException {
+    public static void main(String args[]) throws NotALabelException, NotAnIntegeException, FileNotFoundException {
         HashMap<String, List<Object>> columns = new HashMap<>();
 
         List<Object> names = new ArrayList<>();
@@ -290,10 +329,15 @@ public class Dataframe {
         columns.put("name", names);
 
 
-        System.out.println("Create dataframe");
+        System.out.println("Display Dataframe");
         Dataframe dataframe = new Dataframe(columns);
-        System.out.println("Display all dataframe");
         dataframe.displayDataframe();
+
+        System.out.println("Affichage Dataframe file bank.csv");
+        Dataframe dataframeFile = new Dataframe("./ressources/bank.csv");
+        dataframeFile.displayDataframe();
+
+
         System.out.println("Display 2 first lines");
         dataframe.displayDataframe(DisplayFirstLines.DISPLAYER, 2);
         System.out.println("Display 2 last lines");
