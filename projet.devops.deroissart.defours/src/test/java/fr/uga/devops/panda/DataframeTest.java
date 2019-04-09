@@ -24,7 +24,8 @@ import java.util.Set;
 public class DataframeTest {
 
     private Dataframe dataframe;
-    private HashMap<String, List<Object>> columns;
+    private Dataframe dataframeFile;
+    private static HashMap<String, List<Object>> columns;
 
     /**
      * set up environment before each test
@@ -67,7 +68,7 @@ public class DataframeTest {
 
 
         dataframe = new Dataframe(columns);
-        Dataframe dataframeFile = new Dataframe("./ressources/bank.csv");
+        dataframeFile = new Dataframe("./ressources/bank.csv");
 
 
         Dataframe dataframe1a2 = dataframe.iloc(0, 1);
@@ -90,23 +91,32 @@ public class DataframeTest {
 
     }
 
-    @Test
-    public void testBasicConstructor() {
+    /**
+     * This class method compare each values in a dataframe with the source
+     *
+     * @param df
+     */
+    public static void testConstructor(Dataframe df) {
         int indexLine;
-        int nbLineDataframe = dataframe.datas.size();
-        Set<String> labels = dataframe.datas.get(0).keySet();
+        int nbLineDataframe = df.datas.size();
+        Set<String> labels = df.datas.get(0).keySet();
         for (String label : labels) {
             for (indexLine = 0; indexLine < nbLineDataframe; indexLine++) {
                 Assert.assertEquals( //compare each value in the dataframe with the source value
-                        columns.get(label).get(indexLine), //expected value
-                        dataframe.datas.get(indexLine).get(label));
+                        columns.get(label).get(indexLine).toString(), //expected value
+                        df.datas.get(indexLine).get(label).toString()); //compare string value (example : bank.csv)
             }
         }
     }
 
     @Test
+    public void testBasicConstructor() {
+        testConstructor(dataframe);
+    }
+
+    @Test
     public void testFileConstructor() {
-        //TODO Comparer qu'il est équiv. (equals) au constructeur basique
+        testConstructor(dataframeFile);
     }
 
     @Test
