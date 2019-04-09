@@ -205,10 +205,10 @@ public class Dataframe {
      * http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.iloc.html#pandas.DataFrame.iloc
      */
     public Dataframe iloc(int begin, int end) throws BadValueException {
-        //TODO Try/Catch OOB
-        if (begin > end) {
+        if (begin > end || begin < 0 || datas.size() <= end) {
             throw new BadValueException("begin must be lesser than end");
         }
+
         int index;
         HashMap<String, List<Object>> columns = new HashMap<>(); //Paramater for the constructor
         for (String columnsName : this.datas.get(0).keySet()) { //Fill all columns

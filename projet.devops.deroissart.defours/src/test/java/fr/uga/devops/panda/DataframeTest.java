@@ -33,11 +33,13 @@ import static com.googlecode.catchexception.CatchException.caughtException;
 
 public class DataframeTest {
 
-    private Dataframe dataframe;
-    private Dataframe dataframeFile;
+    private Dataframe dataframe; //bank.csv
+    private Dataframe dataframeFile; //bank.csv
+    private Dataframe dataframe1To1; //1st line of dataframe
     private Dataframe dataframe1To2;
     private Dataframe dataframe3To4;
     private static HashMap<String, List<Object>> columns;
+    private Dataframe dataframeLoc; //dataframe without column 'position'
 
     /**
      * set up environment before each test
@@ -82,7 +84,7 @@ public class DataframeTest {
         dataframe = new Dataframe(columns);
         dataframeFile = new Dataframe("./ressources/bank.csv");
 
-
+        dataframe1To1 = dataframe.iloc(0, 0);
         dataframe1To2 = dataframe.iloc(0, 1);
         dataframe3To4 = dataframe.iloc(2, 3);
 
@@ -90,8 +92,7 @@ public class DataframeTest {
         selectionDataframe.add("name");
         selectionDataframe.add("solvable");
         selectionDataframe.add("sold");
-        Dataframe dataframeSelection = dataframe.loc(selectionDataframe);
-        dataframeSelection.displayDataframe();
+        dataframeLoc = dataframe.loc(selectionDataframe);
 
 
     }
@@ -128,6 +129,7 @@ public class DataframeTest {
 
     @Test
     public void testilocOK() {
+        testConstructor(dataframe1To1, 0, 0);
         testConstructor(dataframe1To2, 0, 1);
         testConstructor(dataframe3To4, 2, 3);
     }
@@ -135,23 +137,25 @@ public class DataframeTest {
 
     @Test
     public void testilocBeginGTEnd() throws BadValueException {
-        catchException(dataframe1To2).iloc(1, 0); //Catch the exception raised by method's execution code
+        catchException(dataframe).iloc(1, 0); //Catch the exception raised by executed code
         assert caughtException() instanceof BadValueException;
     }
 
     @Test
-    public void testilocbadBeginValue() {
-        //TODO créer DF avec begin -1
+    public void testilocbadBeginValue() throws BadValueException {
+        catchException(dataframe).iloc(-1, 0);
+        assert caughtException() instanceof BadValueException;
     }
 
     @Test
-    public void testilocbadEndValue() {
-        //TODO créer DF avec end qui déclenche un OOB
+    public void testilocbadEndValue() throws BadValueException {
+        catchException(dataframe).iloc(0, 10);
+        assert caughtException() instanceof BadValueException;
     }
 
     @Test
     public void testlocOK() {
-        //TODO créer dataframe et vérifier qu'il correspond
+        testConstructor(dataframeLoc, 0, dataframeLoc.datas.size() - 1);
     }
 
     @Test
