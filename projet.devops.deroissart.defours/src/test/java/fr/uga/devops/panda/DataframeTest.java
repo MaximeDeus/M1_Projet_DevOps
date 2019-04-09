@@ -1,11 +1,18 @@
 package fr.uga.devops.panda;
 
+import fr.uga.devops.panda.exception.NotALabelException;
+import fr.uga.devops.panda.exception.NotAnIntegeException;
+import fr.uga.devops.panda.strategy.operation.Max;
+import fr.uga.devops.panda.strategy.operation.Min;
+import fr.uga.devops.panda.strategy.operation.Sum;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Test class of the project
@@ -17,8 +24,7 @@ import java.util.List;
 public class DataframeTest {
 
     private Dataframe dataframe;
-
-    private HashMap<String, List<Object>> colonnes;
+    private HashMap<String, List<Object>> columns;
 
     /**
      * set up environment before each test
@@ -27,7 +33,7 @@ public class DataframeTest {
      */
     @Before
     public void setUp() throws Exception {
-        HashMap<String, List<Object>> columns = new HashMap<>();
+        columns = new HashMap<>();
 
         List<Object> names = new ArrayList<>();
         names.add("Alain");
@@ -59,52 +65,22 @@ public class DataframeTest {
         columns.put("position", positions);
         columns.put("name", names);
 
-        /**
-         System.out.println("Display Dataframe");
-         Dataframe dataframe = new Dataframe(columns);
-         dataframe.displayDataframe();
 
-         System.out.println("Affichage Dataframe file bank.csv");
-         Dataframe dataframeFile = new Dataframe("./ressources/bank.csv");
-         dataframeFile.displayDataframe();
+        dataframe = new Dataframe(columns);
+        Dataframe dataframeFile = new Dataframe("./ressources/bank.csv");
 
 
-         System.out.println("Display 2 first lines");
-         dataframe.displayDataframe(DisplayFirstLines.DISPLAYER, 2);
-         System.out.println("Display 2 last lines");
-         dataframe.displayDataframe(DisplayLastLines.DISPLAYER, 2);
+        Dataframe dataframe1a2 = dataframe.iloc(0, 1);
+        Dataframe dataframe3a4 = dataframe.iloc(2, 3);
 
-         System.out.println("Create dataframe with iloc (0,1)");
+        List<String> selectionDataframe = new ArrayList<>();
+        selectionDataframe.add("name");
+        selectionDataframe.add("solvable");
+        selectionDataframe.add("sold");
+        Dataframe dataframeSelection = dataframe.loc(selectionDataframe);
+        dataframeSelection.displayDataframe();
 
-         Dataframe dataframe1a2 = dataframe.iloc(0, 1);
-         dataframe1a2.displayDataframe();
-
-         System.out.println("Create dataframe with iloc (2,3)");
-         Dataframe dataframe3a4 = dataframe.iloc(2, 3);
-         dataframe3a4.displayDataframe();
-
-         System.out.println("Create dataframe with loc ([sold,solvable,name])");
-         List<String> selectionDataframe = new ArrayList<>();
-         selectionDataframe.add("name");
-         selectionDataframe.add("solvable");
-         selectionDataframe.add("sold");
-         Dataframe dataframeSelection = dataframe.loc(selectionDataframe);
-         dataframeSelection.displayDataframe();
-
-
-         System.out.println("Search min for sold");
-         System.out.println(dataframe.operation("sold", Min.MIN));
-
-         System.out.println("Search max for sold");
-         System.out.println(dataframe.operation("sold", Max.MAX));
-
-         System.out.println("Compute sum for sold");
-         System.out.println(dataframe.operation("sold", Sum.SUM));
-
-         System.out.println("Compute average for sold");
-         System.out.println(dataframe.average("sold"));
-
-
+/*
          This class is used to easily test if an Exception is raised
          For more informations, see :
 
@@ -116,7 +92,16 @@ public class DataframeTest {
 
     @Test
     public void testBasicConstructor() {
-        //TODO Vérifier que Dataframe correspond bien aux données (parcourt struct)
+        int indexLine;
+        int nbLineDataframe = dataframe.datas.size();
+        Set<String> labels = dataframe.datas.get(0).keySet();
+        for (String label : labels) {
+            for (indexLine = 0; indexLine < nbLineDataframe; indexLine++) {
+                Assert.assertEquals( //compare each value in the dataframe with the source value
+                        columns.get(label).get(indexLine), //expected value
+                        dataframe.datas.get(indexLine).get(label));
+            }
+        }
     }
 
     @Test
@@ -155,23 +140,27 @@ public class DataframeTest {
     }
 
     @Test
-    public void testOperationMin() {
-        //TODO vérifier si resultat correspond
+    public void testOperationMin() throws NotALabelException, NotAnIntegeException {
+        int res = dataframe.operation("sold", Min.MIN);
+        Assert.assertEquals(-2500, res);
     }
 
     @Test
-    public void testOperationMax() {
-        //TODO vérifier si resultat correspond
+    public void testOperationMax() throws NotALabelException, NotAnIntegeException {
+        int res = dataframe.operation("sold", Max.MAX);
+        Assert.assertEquals(2800, res);
     }
 
     @Test
-    public void testOperationSum() {
-        //TODO vérifier si resultat correspond
+    public void testOperationSum() throws NotALabelException, NotAnIntegeException {
+        int res = dataframe.operation("sold", Sum.SUM);
+        Assert.assertEquals(1500, res);
     }
 
     @Test
-    public void testOperationAvg() {
-        //TODO vérifier si resultat correspond
+    public void testOperationAvg() throws NotALabelException, NotAnIntegeException {
+        float res = dataframe.average("sold");
+        Assert.assertEquals(375.0, res, 0);
     }
 
     @Test
