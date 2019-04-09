@@ -1,5 +1,6 @@
 package fr.uga.devops.panda;
 
+import fr.uga.devops.panda.exception.BadValueException;
 import fr.uga.devops.panda.exception.NotALabelException;
 import fr.uga.devops.panda.exception.NotAnIntegeException;
 import fr.uga.devops.panda.strategy.operation.Max;
@@ -14,17 +15,28 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import static com.googlecode.catchexception.CatchException.catchException;
+import static com.googlecode.catchexception.CatchException.caughtException;
+
 /**
  * Test class of the project
  *
  * @author Maxime Deroissart
  * @author Ronan Defours
  * @version 1.0
+ * <p>
+ * The google librairy catch-excception is used for
+ * easily test if an Exception is raised
+ * For more informations, see :
+ * http://www.arolla.fr/blog/2014/03/catch-exception-pour-tester-vos-exceptions-sur-junit/
  */
+
 public class DataframeTest {
 
     private Dataframe dataframe;
     private Dataframe dataframeFile;
+    private Dataframe dataframe1To2;
+    private Dataframe dataframe3To4;
     private static HashMap<String, List<Object>> columns;
 
     /**
@@ -71,8 +83,8 @@ public class DataframeTest {
         dataframeFile = new Dataframe("./ressources/bank.csv");
 
 
-        Dataframe dataframe1a2 = dataframe.iloc(0, 1);
-        Dataframe dataframe3a4 = dataframe.iloc(2, 3);
+        dataframe1To2 = dataframe.iloc(0, 1);
+        dataframe3To4 = dataframe.iloc(2, 3);
 
         List<String> selectionDataframe = new ArrayList<>();
         selectionDataframe.add("name");
@@ -81,13 +93,6 @@ public class DataframeTest {
         Dataframe dataframeSelection = dataframe.loc(selectionDataframe);
         dataframeSelection.displayDataframe();
 
-/*
-         This class is used to easily test if an Exception is raised
-         For more informations, see :
-
-         http://www.arolla.fr/blog/2014/03/catch-exception-pour-tester-vos-exceptions-sur-junit/
-         /
-         */
 
     }
 
@@ -96,37 +101,42 @@ public class DataframeTest {
      *
      * @param df
      */
-    public static void testConstructor(Dataframe df) {
-        int indexLine;
-        int nbLineDataframe = df.datas.size();
+    public static void testConstructor(Dataframe df, int begin, int end) {
         Set<String> labels = df.datas.get(0).keySet();
+        int indexLine = begin;
+        int indexDataframe;
         for (String label : labels) {
-            for (indexLine = 0; indexLine < nbLineDataframe; indexLine++) {
+            for (indexDataframe = 0; indexDataframe <= (end - begin); indexDataframe++) {
                 Assert.assertEquals( //compare each value in the dataframe with the source value
                         columns.get(label).get(indexLine).toString(), //expected value
-                        df.datas.get(indexLine).get(label).toString()); //compare string value (example : bank.csv)
+                        df.datas.get(indexDataframe).get(label).toString()); //compare string value (example : bank.csv)
+                indexLine++;
             }
+            indexLine = begin;
         }
     }
 
     @Test
     public void testBasicConstructor() {
-        testConstructor(dataframe);
+        testConstructor(dataframe, 0, dataframe.datas.size() - 1);
     }
 
     @Test
     public void testFileConstructor() {
-        testConstructor(dataframeFile);
+        testConstructor(dataframeFile, 0, dataframe.datas.size() - 1);
     }
 
     @Test
     public void testilocOK() {
-        //TODO créer dataframe et vérifier qu'il corresp à la selection
+        testConstructor(dataframe1To2, 0, 1);
+        testConstructor(dataframe3To4, 2, 3);
     }
 
+
     @Test
-    public void testilocBeginGTEnd() {
-        //TODO créer DF avec begin > end et vérifier qu'il est vide
+    public void testilocBeginGTEnd() throws BadValueException {
+        catchException(dataframe1To2).iloc(1, 0); //Catch the exception raised by method's execution code
+        assert caughtException() instanceof BadValueException;
     }
 
     @Test

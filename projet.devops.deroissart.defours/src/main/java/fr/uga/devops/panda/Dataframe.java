@@ -1,6 +1,7 @@
 package fr.uga.devops.panda;
 
 
+import fr.uga.devops.panda.exception.BadValueException;
 import fr.uga.devops.panda.exception.NotALabelException;
 import fr.uga.devops.panda.exception.NotAnIntegeException;
 import fr.uga.devops.panda.strategy.display.DisplayFirstLines;
@@ -203,8 +204,11 @@ public class Dataframe {
      * <p>
      * http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.iloc.html#pandas.DataFrame.iloc
      */
-    public Dataframe iloc(int begin, int end) {
+    public Dataframe iloc(int begin, int end) throws BadValueException {
         //TODO Try/Catch OOB
+        if (begin > end) {
+            throw new BadValueException("begin must be lesser than end");
+        }
         int index;
         HashMap<String, List<Object>> columns = new HashMap<>(); //Paramater for the constructor
         for (String columnsName : this.datas.get(0).keySet()) { //Fill all columns
@@ -295,7 +299,7 @@ public class Dataframe {
     }
 
 
-    public static void main(String args[]) throws NotALabelException, NotAnIntegeException, FileNotFoundException {
+    public static void main(String args[]) throws NotALabelException, NotAnIntegeException, FileNotFoundException, BadValueException {
         HashMap<String, List<Object>> columns = new HashMap<>();
 
         List<Object> names = new ArrayList<>();
