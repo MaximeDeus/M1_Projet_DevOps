@@ -230,8 +230,14 @@ public class Dataframe {
      * <p>
      * http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.loc.html#pandas.DataFrame.iloc
      */
-    public Dataframe loc(List<String> labels) {
-        //TODO Vérifier que les clés existent
+    public Dataframe loc(List<String> labels) throws NotALabelException {
+
+        for (String label : labels) {
+            if (!datas.get(0).containsKey(label)) {
+                throw new NotALabelException("Unknown column");
+            }
+        }
+
         int index;
         HashMap<String, List<Object>> columns = new HashMap<>(); //Paramater for the constructor
         for (String columnsName : labels) { //Fill all columns

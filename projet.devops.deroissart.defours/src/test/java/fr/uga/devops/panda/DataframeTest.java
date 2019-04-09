@@ -10,10 +10,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static com.googlecode.catchexception.CatchException.catchException;
 import static com.googlecode.catchexception.CatchException.caughtException;
@@ -142,14 +139,14 @@ public class DataframeTest {
     }
 
     @Test
-    public void testilocbadBeginValue() throws BadValueException {
+    public void testilocOOBBegin() throws BadValueException {
         catchException(dataframe).iloc(-1, 0);
         assert caughtException() instanceof BadValueException;
     }
 
     @Test
-    public void testilocbadEndValue() throws BadValueException {
-        catchException(dataframe).iloc(0, 10);
+    public void testilocOOBEnd() throws BadValueException {
+        catchException(dataframe).iloc(0, dataframe.datas.size());
         assert caughtException() instanceof BadValueException;
     }
 
@@ -159,8 +156,12 @@ public class DataframeTest {
     }
 
     @Test
-    public void testlocWithUnknownLabel() {
-        //TODO créer dataframe avec label inconnu
+    public void testlocWithUnknownLabel() throws NotALabelException {
+        ArrayList<String> containerUnknownColumn = new ArrayList<String>();
+        String[] unknownColumn = {"sold", "position", "solvable", "octogone"};
+        containerUnknownColumn.addAll(Arrays.asList(unknownColumn));
+        catchException(dataframe).loc(containerUnknownColumn);
+        assert caughtException() instanceof NotALabelException;
     }
 
     @Test
