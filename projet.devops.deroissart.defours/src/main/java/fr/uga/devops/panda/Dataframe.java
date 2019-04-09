@@ -4,13 +4,8 @@ package fr.uga.devops.panda;
 import fr.uga.devops.panda.exception.BadValueException;
 import fr.uga.devops.panda.exception.NotALabelException;
 import fr.uga.devops.panda.exception.NotAnIntegeException;
-import fr.uga.devops.panda.strategy.display.DisplayFirstLines;
-import fr.uga.devops.panda.strategy.display.DisplayLastLines;
 import fr.uga.devops.panda.strategy.display.Display_Itf;
-import fr.uga.devops.panda.strategy.operation.Max;
-import fr.uga.devops.panda.strategy.operation.Min;
 import fr.uga.devops.panda.strategy.operation.Operation;
-import fr.uga.devops.panda.strategy.operation.Sum;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -174,8 +169,11 @@ public class Dataframe {
      * @param displayStrategy the choosen strategy
      * @param nb_lines        the number of lines displayed
      */
-    public void displayDataframe(Display_Itf displayStrategy, int nb_lines) {
+    public void displayDataframe(Display_Itf displayStrategy, int nb_lines) throws BadValueException {
         //TODO Ajouter try/catch pour gérer OOB
+        if (nb_lines < 1 || nb_lines > datas.size()) {
+            throw new BadValueException("bad value");
+        }
         int index;
         String space = new String(new char[10]).replace("\0", " ");
         for (String columnsName : datas.get(0).keySet()) {
@@ -302,85 +300,5 @@ public class Dataframe {
             }
             return accumulator / size;
         }
-    }
-
-
-    public static void main(String args[]) throws NotALabelException, NotAnIntegeException, FileNotFoundException, BadValueException {
-        HashMap<String, List<Object>> columns = new HashMap<>();
-
-        List<Object> names = new ArrayList<>();
-        names.add("Alain");
-        names.add("Beatrice");
-        names.add("Claude");
-        names.add("Daniel");
-
-        List<Object> positions = new ArrayList<>();
-        positions.add(1);
-        positions.add(2);
-        positions.add(3);
-        positions.add(4);
-
-        List<Object> solvable = new ArrayList<>();
-        solvable.add(true);
-        solvable.add(false);
-        solvable.add(true);
-        solvable.add(false);
-
-        List<Object> sold = new ArrayList<>();
-        sold.add(1500);
-        sold.add(-300);
-        sold.add(2800);
-        sold.add(-2500);
-
-
-        columns.put("sold", sold);
-        columns.put("solvable", solvable);
-        columns.put("position", positions);
-        columns.put("name", names);
-
-
-        System.out.println("Display Dataframe");
-        Dataframe dataframe = new Dataframe(columns);
-        dataframe.displayDataframe();
-
-        System.out.println("Affichage Dataframe file bank.csv");
-        Dataframe dataframeFile = new Dataframe("./ressources/bank.csv");
-        dataframeFile.displayDataframe();
-
-
-        System.out.println("Display 2 first lines");
-        dataframe.displayDataframe(DisplayFirstLines.DISPLAYER, 2);
-        System.out.println("Display 2 last lines");
-        dataframe.displayDataframe(DisplayLastLines.DISPLAYER, 2);
-
-        System.out.println("Create dataframe with iloc (0,1)");
-
-        Dataframe dataframe1a2 = dataframe.iloc(0, 1);
-        dataframe1a2.displayDataframe();
-
-        System.out.println("Create dataframe with iloc (2,3)");
-        Dataframe dataframe3a4 = dataframe.iloc(2, 3);
-        dataframe3a4.displayDataframe();
-
-        System.out.println("Create dataframe with loc ([sold,solvable,name])");
-        List<String> selectionDataframe = new ArrayList<>();
-        selectionDataframe.add("name");
-        selectionDataframe.add("solvable");
-        selectionDataframe.add("sold");
-        Dataframe dataframeSelection = dataframe.loc(selectionDataframe);
-        dataframeSelection.displayDataframe();
-
-
-        System.out.println("Search min for sold");
-        System.out.println(dataframe.operation("sold", Min.MIN));
-
-        System.out.println("Search max for sold");
-        System.out.println(dataframe.operation("sold", Max.MAX));
-
-        System.out.println("Compute sum for sold");
-        System.out.println(dataframe.operation("sold", Sum.SUM));
-
-        System.out.println("Compute average for sold");
-        System.out.println(dataframe.average("sold"));
     }
 }

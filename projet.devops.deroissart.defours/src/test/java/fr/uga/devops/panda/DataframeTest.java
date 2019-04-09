@@ -3,6 +3,8 @@ package fr.uga.devops.panda;
 import fr.uga.devops.panda.exception.BadValueException;
 import fr.uga.devops.panda.exception.NotALabelException;
 import fr.uga.devops.panda.exception.NotAnIntegeException;
+import fr.uga.devops.panda.strategy.display.DisplayFirstLines;
+import fr.uga.devops.panda.strategy.display.DisplayLastLines;
 import fr.uga.devops.panda.strategy.operation.Max;
 import fr.uga.devops.panda.strategy.operation.Min;
 import fr.uga.devops.panda.strategy.operation.Sum;
@@ -189,12 +191,75 @@ public class DataframeTest {
     }
 
     @Test
-    public void testOperationWithBadType() {
-        //TODO vérifier si renvoie NotAnIntegerException
+    public void testOperationOK() throws NotALabelException, NotAnIntegeException {
+        catchException(dataframe).operation("sold", Max.MAX);
+        Assert.assertNull(caughtException());
     }
 
     @Test
-    public void testOperationWithUnknownLabel() {
-        //TODO vérifier si renvoie NotALabelException
+    public void testOperationWithBadType() throws NotALabelException, NotAnIntegeException {
+        catchException(dataframe).operation("name", Sum.SUM);
+        assert caughtException() instanceof NotAnIntegeException;
+    }
+
+
+    @Test
+    public void testOperationWithBadLabel() throws NotALabelException, NotAnIntegeException {
+        catchException(dataframe).operation("mononoke", Max.MAX);
+        assert caughtException() instanceof NotALabelException;
+    }
+
+    @Test
+    public void testAverageOK() throws NotALabelException, NotAnIntegeException {
+        catchException(dataframe).average("sold");
+        Assert.assertNull(caughtException());
+    }
+
+    @Test
+    public void testAverageWithBadType() throws NotALabelException, NotAnIntegeException {
+        catchException(dataframe).average("name");
+        assert caughtException() instanceof NotAnIntegeException;
+    }
+
+    @Test
+    public void testDisplayDataframeOK() {
+        catchException(dataframe).displayDataframe();
+        Assert.assertNull(caughtException());
+    }
+
+    @Test
+    public void testDisplayDataframeWithStrategyFirstLineOK() throws BadValueException {
+        catchException(dataframe).displayDataframe(DisplayFirstLines.DISPLAYER, 1);
+        Assert.assertNull(caughtException());
+    }
+
+    @Test
+    public void testDisplayDataframeFirstLineWith0Line() throws BadValueException {
+        catchException(dataframe).displayDataframe(DisplayFirstLines.DISPLAYER, 0);
+        assert caughtException() instanceof BadValueException;
+    }
+
+    @Test
+    public void testDisplayDataframeFirstLineWithTooMuchLine() throws BadValueException {
+        catchException(dataframe).displayDataframe(DisplayFirstLines.DISPLAYER, dataframe.datas.size() + 1);
+        assert caughtException() instanceof BadValueException;
+    }
+
+    @Test
+    public void testDisplayDataframeWithStrategyLastLineOK() throws BadValueException {
+        catchException(dataframe).displayDataframe(DisplayLastLines.DISPLAYER, 1);
+        Assert.assertNull(caughtException());
+    }
+
+    @Test
+    public void testDisplayDataframeLastLineWith0Line() throws BadValueException {
+        catchException(dataframe).displayDataframe(DisplayLastLines.DISPLAYER, 0);
+        assert caughtException() instanceof BadValueException;
+    }
+
+    @Test
+    public void testDisplayDataframeLastLineWithTooMuchLine() throws BadValueException {
+        catchException(dataframe).displayDataframe(DisplayLastLines.DISPLAYER, dataframe.datas.size() + 1);
+        assert caughtException() instanceof BadValueException;
     }
 }
