@@ -1,6 +1,8 @@
 package fr.uga.devops.panda;
 
 
+import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderBuilder;
 import fr.uga.devops.panda.exception.BadValueException;
 import fr.uga.devops.panda.exception.NotALabelException;
 import fr.uga.devops.panda.exception.NotAnIntegeException;
@@ -9,10 +11,9 @@ import fr.uga.devops.panda.strategy.operation.Operation;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * Main class of the project
@@ -81,7 +82,7 @@ public class Dataframe {
     }
 
     /**
-     * Méthode 2, a CSV file is parsed
+     * Méthode 2, a CSV file is parsed using OpenCSV library
      * Example
      * <p>
      * {
@@ -98,54 +99,25 @@ public class Dataframe {
      * Daniel      4
      */
 
-
-    public Dataframe(String pathName) throws FileNotFoundException {
+    public Dataframe(String pathName) throws IOException {
         datas = new ArrayList<>();
-        Scanner scanner = new Scanner(new File(pathName));
-        String value = "";
-        int index = 0;
-        int nbOfColumn = 0;
-        int cpt = 0;
-        List<String> labels = new ArrayList<>(); //labels
-        boolean first_line = true; //first line = labels
-        scanner.useDelimiter(",|\\r"); //Each value must be separated by a comma
-        while (scanner.hasNext()) {
-            //TODO affichages à supprimer
-            value = scanner.next();
-            System.out.println("while - value = " + value);
-            if (value.contains("\n")) { //end of line
-                System.out.println("while - contains \\n");
-                first_line = false; //Fill columns
+        FileReader filereader = new FileReader(pathName);
+        CSVReader csvReader = new CSVReaderBuilder(filereader).build(); //Parser CSV
+        String[] labels = csvReader.readNext();
+        List<String[]> lines = csvReader.readAll();
+        int indexLine = 0;
+        int indexColumn = 0;
+        for (String[] row : lines) {
+            datas.add(new HashMap<String, Object>());
+            for (String cell : row) {
+                datas.get(indexLine).put(labels[indexColumn], cell); //Fill datas
+                indexColumn++;
             }
-            if (first_line) { //Fill labels
-                System.out.println("while - first line");
-                nbOfColumn++;
-                labels.add(value);
-                HashMap<String, Object> line = new HashMap<>();
-                datas.add(line); //Initialize lines
-            } else { //Fill columns
-                for (String label : labels) { // Fill line by line
-                    System.out.println("for - label : " + label);
-                    System.out.println("for - value = " + value);
-                    //Remove \n (contains 1st value of the next column or EOF)
-                    if (value.contains("\n")) {
-                        System.out.println("for - contains \\n");
-                        value = value.substring(1);
-                    }
-                    datas.get(index).put(label, value);
-                    if (cpt == nbOfColumn - 1) {
-                        cpt = 0;
-                    } else {
-                        cpt++;
-                        value = scanner.next();
-                    }
-                }
-                index++;
-                System.out.println("index incrémenté, valeur : " + index);
-            }
+            indexColumn = 0;
+            indexLine++;
         }
-        scanner.close();
     }
+
 
     //DISPLAY Dataframe
 
