@@ -110,19 +110,26 @@ public class Dataframe {
         boolean first_line = true; //first line = labels
         scanner.useDelimiter(",|\\r"); //Each value must be separated by a comma
         while (scanner.hasNext()) {
+            //TODO affichages à supprimer
             value = scanner.next();
+            System.out.println("while - value = " + value);
             if (value.contains("\n")) { //end of line
+                System.out.println("while - contains \\n");
                 first_line = false; //Fill columns
             }
             if (first_line) { //Fill labels
+                System.out.println("while - first line");
                 nbOfColumn++;
                 labels.add(value);
                 HashMap<String, Object> line = new HashMap<>();
                 datas.add(line); //Initialize lines
             } else { //Fill columns
                 for (String label : labels) { // Fill line by line
+                    System.out.println("for - label : " + label);
+                    System.out.println("for - value = " + value);
                     //Remove \n (contains 1st value of the next column or EOF)
                     if (value.contains("\n")) {
+                        System.out.println("for - contains \\n");
                         value = value.substring(1);
                     }
                     datas.get(index).put(label, value);
@@ -134,6 +141,7 @@ public class Dataframe {
                     }
                 }
                 index++;
+                System.out.println("index incrémenté, valeur : " + index);
             }
         }
         scanner.close();
