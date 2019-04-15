@@ -1,0 +1,5 @@
+language: java
+before_script: cd projet.devops.deroissart.defours/
+script: mvn test
+jdk:
+  - oraclejdk8
