@@ -170,7 +170,6 @@ public class Dataframe {
      * @param nb_lines        the number of lines displayed
      */
     public void displayDataframe(Display_Itf displayStrategy, int nb_lines) throws BadValueException {
-        //TODO Ajouter try/catch pour gérer OOB
         if (nb_lines < 1 || nb_lines > datas.size()) {
             throw new BadValueException("bad value");
         }

@@ -24,7 +24,7 @@ import static com.googlecode.catchexception.CatchException.caughtException;
  * @author Ronan Defours
  * @version 1.0
  * <p>
- * The google librairy catch-excception is used for
+ * The google library catch-excception is used to
  * easily test if an Exception is raised
  * For more informations, see :
  * http://www.arolla.fr/blog/2014/03/catch-exception-pour-tester-vos-exceptions-sur-junit/
@@ -219,6 +219,12 @@ public class DataframeTest {
     public void testAverageWithBadType() throws NotALabelException, NotAnIntegeException {
         catchException(dataframe).average("name");
         assert caughtException() instanceof NotAnIntegeException;
+    }
+
+    @Test
+    public void testAverageWithBadLabel() throws NotALabelException, NotAnIntegeException {
+        catchException(dataframe).average("RIP_Notre_Dame");
+        assert caughtException() instanceof NotALabelException;
     }
 
     @Test
