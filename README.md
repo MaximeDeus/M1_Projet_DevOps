@@ -4,6 +4,8 @@
 
 ### 1- Badges
 
+[![Known Vulnerabilities](https://snyk.io/test/github/MaximeDeus/M1_Projet_DevOps/badge.svg?targetFile=projet.devops.deroissart.defours%2Fpom.xml)](https://snyk.io/test/github/MaximeDeus/M1_Projet_DevOps?targetFile=projet.devops.deroissart.defours%2Fpom.xml)
+
 [![Build Status](https://travis-ci.com/MaximeDeus/M1_Projet_DevOps.svg?branch=master)](https://travis-ci.com/MaximeDeus/M1_Projet_DevOps)
 
 [![codecov](https://codecov.io/gh/MaximeDeus/M1_Projet_DevOps/branch/master/graph/badge.svg)](https://codecov.io/gh/MaximeDeus/M1_Projet_DevOps)
