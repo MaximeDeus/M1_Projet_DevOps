@@ -6,6 +6,8 @@
 
 [![Build Status](https://travis-ci.com/MaximeDeus/M1_Projet_DevOps.svg?branch=master)](https://travis-ci.com/MaximeDeus/M1_Projet_DevOps)
 
+[![codecov](https://codecov.io/gh/MaximeDeus/M1_Projet_DevOps/branch/master/graph/badge.svg)](https://codecov.io/gh/MaximeDeus/M1_Projet_DevOps)
+
 
 ### 1- Présentation de l'ensemble des fonctionnalités
 
