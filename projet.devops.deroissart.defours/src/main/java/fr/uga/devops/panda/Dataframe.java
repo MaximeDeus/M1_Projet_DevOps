@@ -5,12 +5,10 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import fr.uga.devops.panda.exception.BadValueException;
 import fr.uga.devops.panda.exception.NotALabelException;
-import fr.uga.devops.panda.exception.NotAnIntegeException;
+import fr.uga.devops.panda.exception.NotAnIntegerException;
 import fr.uga.devops.panda.strategy.display.Display_Itf;
 import fr.uga.devops.panda.strategy.operation.Operation;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
@@ -56,6 +54,8 @@ public class Dataframe {
      * Beatrice    2
      * Claude      3
      * Daniel      4
+     *
+     * @param columns the dictionary
      */
 
 
@@ -97,6 +97,8 @@ public class Dataframe {
      * Beatrice    2
      * Claude      3
      * Daniel      4
+     * @param pathName the path of the csv file (relative path = projet.devops.deroissart.defours)
+     * @throws IOException if file error
      */
 
     public Dataframe(String pathName) throws IOException {
@@ -148,6 +150,7 @@ public class Dataframe {
      *
      * @param displayStrategy the choosen strategy
      * @param nb_lines        the number of lines displayed
+     * @throws BadValueException if incorrect number of line
      */
     public void displayDataframe(Display_Itf displayStrategy, int nb_lines) throws BadValueException {
         if (nb_lines < 1 || nb_lines > datas.size()) {
@@ -180,6 +183,11 @@ public class Dataframe {
      * More info see :
      * <p>
      * http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.iloc.html#pandas.DataFrame.iloc
+     * @param begin begin of interval
+     * @param end end of interval
+     * @throws BadValueException if incorrect interval
+     *
+     * @return a Dataframe
      */
     public Dataframe iloc(int begin, int end) throws BadValueException {
         if (begin > end || begin < 0 || datas.size() <= end) {
@@ -206,6 +214,9 @@ public class Dataframe {
      * More info see :
      * <p>
      * http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.loc.html#pandas.DataFrame.iloc
+     * @param labels list of columns names
+     * @throws NotALabelException if column doesn't exist
+     * @return a Dataframe
      */
     public Dataframe loc(List<String> labels) throws NotALabelException {
 
@@ -233,6 +244,8 @@ public class Dataframe {
      *
      * @param label: column name
      * @param op     : the operation
+     * @throws NotALabelException if column doesn't exist
+     * @throws NotAnIntegerException if values of the column are not integer
      * @return the operation of this column
      * <p>
      * For more informations see :
@@ -241,14 +254,14 @@ public class Dataframe {
      * http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.max.html
      * http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.sum.html
      */
-    public int operation(String label, Operation op) throws NotAnIntegeException, NotALabelException {
+    public int operation(String label, Operation op) throws NotAnIntegerException, NotALabelException {
         int res;
         int current_val;
         int index;
         if (!this.datas.get(0).containsKey(label)) {
             throw new NotALabelException("this key is not defined");
         } else if (!(this.datas.get(0).get(label) instanceof Integer)) {
-            throw new NotAnIntegeException("the column must contain integers");
+            throw new NotAnIntegerException("the column must contain integers");
         } else {
             res = (Integer) datas.get(0).get(label); //If we initialize with an arbitrary value, she could be wrong
             for (index = 1; index < datas.size(); index++) {
@@ -263,16 +276,18 @@ public class Dataframe {
      * This method returns the average value for this column
      *
      * @param label: column name
+     * @throws NotALabelException if column doesn't exist
+     * @throws NotAnIntegerException if values of the column are not integer
      * @return the average of this column
      */
-    public float average(String label) throws NotAnIntegeException, NotALabelException {
+    public float average(String label) throws NotAnIntegerException, NotALabelException {
         float accumulator = 0;
         int size = this.datas.size();
         int index;
         if (!this.datas.get(0).containsKey(label)) {
             throw new NotALabelException("this key is not defined");
         } else if (!(this.datas.get(0).get(label) instanceof Integer)) {
-            throw new NotAnIntegeException("the column must contain integers");
+            throw new NotAnIntegerException("the column must contain integers");
         } else {
             for (index = 0; index < size; index++) {
                 accumulator += (Integer) datas.get(index).get(label);

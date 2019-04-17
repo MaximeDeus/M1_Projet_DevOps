@@ -3,7 +3,6 @@ package fr.uga.devops.panda.strategy.operation;
 /**
  * @author Maxime Deroissart | Defours Ronan
  * @version 1.0
- * @date 04062019
  */
 public class Sum implements Operation {
 
@@ -15,11 +14,10 @@ public class Sum implements Operation {
     /**
      * This method return the sum between these two integer
      *
-     * @param i1
-     * @param i2
+     * @param i1 the first integer
+     * @param i2 the second integer
      * @return the sum of these two integer
      */
-
     @Override
     public int compute(int i1, int i2) {
         return i1 + i2;

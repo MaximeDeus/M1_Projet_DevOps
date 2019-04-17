@@ -2,7 +2,7 @@ package fr.uga.devops.panda;
 
 import fr.uga.devops.panda.exception.BadValueException;
 import fr.uga.devops.panda.exception.NotALabelException;
-import fr.uga.devops.panda.exception.NotAnIntegeException;
+import fr.uga.devops.panda.exception.NotAnIntegerException;
 import fr.uga.devops.panda.strategy.display.DisplayFirstLines;
 import fr.uga.devops.panda.strategy.display.DisplayLastLines;
 import fr.uga.devops.panda.strategy.operation.Max;
@@ -167,62 +167,62 @@ public class DataframeTest {
     }
 
     @Test
-    public void testOperationMin() throws NotALabelException, NotAnIntegeException {
+    public void testOperationMin() throws NotALabelException, NotAnIntegerException {
         int res = dataframe.operation("sold", Min.MIN);
         Assert.assertEquals(-2500, res);
     }
 
     @Test
-    public void testOperationMax() throws NotALabelException, NotAnIntegeException {
+    public void testOperationMax() throws NotALabelException, NotAnIntegerException {
         int res = dataframe.operation("sold", Max.MAX);
         Assert.assertEquals(2800, res);
     }
 
     @Test
-    public void testOperationSum() throws NotALabelException, NotAnIntegeException {
+    public void testOperationSum() throws NotALabelException, NotAnIntegerException {
         int res = dataframe.operation("sold", Sum.SUM);
         Assert.assertEquals(1500, res);
     }
 
     @Test
-    public void testOperationAvg() throws NotALabelException, NotAnIntegeException {
+    public void testOperationAvg() throws NotALabelException, NotAnIntegerException {
         float res = dataframe.average("sold");
         Assert.assertEquals(375.0, res, 0);
     }
 
     @Test
-    public void testOperationOK() throws NotALabelException, NotAnIntegeException {
+    public void testOperationOK() throws NotALabelException, NotAnIntegerException {
         catchException(dataframe).operation("sold", Max.MAX);
         Assert.assertNull(caughtException());
     }
 
     @Test
-    public void testOperationWithBadType() throws NotALabelException, NotAnIntegeException {
+    public void testOperationWithBadType() throws NotALabelException, NotAnIntegerException {
         catchException(dataframe).operation("name", Sum.SUM);
-        assert caughtException() instanceof NotAnIntegeException;
+        assert caughtException() instanceof NotAnIntegerException;
     }
 
 
     @Test
-    public void testOperationWithBadLabel() throws NotALabelException, NotAnIntegeException {
+    public void testOperationWithBadLabel() throws NotALabelException, NotAnIntegerException {
         catchException(dataframe).operation("mononoke", Max.MAX);
         assert caughtException() instanceof NotALabelException;
     }
 
     @Test
-    public void testAverageOK() throws NotALabelException, NotAnIntegeException {
+    public void testAverageOK() throws NotALabelException, NotAnIntegerException {
         catchException(dataframe).average("sold");
         Assert.assertNull(caughtException());
     }
 
     @Test
-    public void testAverageWithBadType() throws NotALabelException, NotAnIntegeException {
+    public void testAverageWithBadType() throws NotALabelException, NotAnIntegerException {
         catchException(dataframe).average("name");
-        assert caughtException() instanceof NotAnIntegeException;
+        assert caughtException() instanceof NotAnIntegerException;
     }
 
     @Test
-    public void testAverageWithBadLabel() throws NotALabelException, NotAnIntegeException {
+    public void testAverageWithBadLabel() throws NotALabelException, NotAnIntegerException {
         catchException(dataframe).average("RIP_Notre_Dame");
         assert caughtException() instanceof NotALabelException;
     }

@@ -9,9 +9,14 @@ package fr.uga.devops.panda.strategy.operation;
  *
  * @author Maxime Deroissart | Defours Ronan
  * @version 1.0
- * @date 04062019
  */
 public interface Operation {
-
+    /**
+     * This method return the operation between these two integer
+     *
+     * @param i1 the first integer
+     * @param i2 the second integer
+     * @return the result of the operation between these two integer
+     */
     int compute(int i1, int i2);
 }

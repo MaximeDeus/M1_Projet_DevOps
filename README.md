@@ -61,8 +61,14 @@ Différentes bibliothèque ont été utilisées :
 S'agissant d'une bibliothèque d’analyse de données, le programme ne possède pas de fonction principale.
 Il s'agit donc ici d'exécuter les tests et générer la documentation. 
 
-Pour exécuter la commande suivante depuis le dossier projet.devops.deroissart.defours :
+Pour exécuter les tests, executer la commande suivante depuis le dossier projet.devops.deroissart.defours :
 $ mvn test
+
+Pour générer la documentation, executer la commande suivante depuis le dossier projet.devops.deroissart.defours :
+$ mvn javadoc:javadoc
+
+Pour nettoyer le projet, executer la commande suivante depuis le dossier projet.devops.deroissart.defours :
+$ mvn clean
 
 4- FeedBack
 
