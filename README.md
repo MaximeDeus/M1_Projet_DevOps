@@ -17,7 +17,7 @@ Notre service permet de créer des Dataframes de deux façons différentes.
 1. La première façon est le passage en paramètre d'une structure de données, ici un dictionnaire.
 Chaque clé correspond à une colonne, représentée par un tableau.
 
-- La seconde façon de créer un dataframe est le passage d'un fichier csv. Un exemple est disponible dans le dossier ressources du projet.
+2. La seconde façon de créer un dataframe est le passage d'un fichier csv. Un exemple est disponible dans le dossier ressources du projet.
 
 ##### Affichage d'un Dataframe
 
