@@ -56,7 +56,7 @@ Différentes bibliothèque ont été utilisées :
 2. Google catch exception pour tester les exceptions dans des containers
 3. OpenCSV pour lire un fichier csv (posait problème sur Travis avec la lib java.util.Scanner)
 
-3- Mode d'emploi
+### 4- Mode d'emploi
 
 S'agissant d'une bibliothèque d’analyse de données, le programme ne possède pas de fonction principale.
 Il s'agit donc ici d'exécuter les tests et générer la documentation. 
@@ -70,7 +70,7 @@ $ mvn javadoc:javadoc
 Pour nettoyer le projet, executer la commande suivante depuis le dossier projet.devops.deroissart.defours :
 $ mvn clean
 
-### 4- FeedBack
+### 5- FeedBack
 
 Nous avons appris pas mal de choses, que d'ailleurs nous aurions du mettre en place plus tôt,
 comme par exemple les badges ainsi que l'utilisation d'outils qui permettent de vérifier et déployer du code à chaque mise en ligne.
