@@ -42,7 +42,7 @@ Les colonnes qui correspondent à un type numérique peuvent renvoyer :
 3. La somme
 4. La moyenne
 
-### 2- Présentation des outils utilisés
+### 3- Présentation des outils utilisés
 
 Le projet est basé sur une architecture Maven
 Pour les badges, nous avons utilisé les services suivants :
@@ -70,7 +70,7 @@ $ mvn javadoc:javadoc
 Pour nettoyer le projet, executer la commande suivante depuis le dossier projet.devops.deroissart.defours :
 $ mvn clean
 
-4- FeedBack
+### 4- FeedBack
 
 Nous avons appris pas mal de choses, que d'ailleurs nous aurions du mettre en place plus tôt,
 comme par exemple les badges ainsi que l'utilisation d'outils qui permettent de vérifier et déployer du code à chaque mise en ligne.
