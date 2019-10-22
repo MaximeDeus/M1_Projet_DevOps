@@ -36,7 +36,7 @@
     <dependency>
       <groupId>com.opencsv</groupId>
       <artifactId>opencsv</artifactId>
-      <version>4.0</version>
+      <version>5.0</version>
     </dependency>
   </dependencies>
 
@@ -91,7 +91,7 @@
              <format>html</format>
              <format>xml</format>
              </formats>
-            <check />
+            <check/>
          </configuration>
         </plugin>
       </plugins>
